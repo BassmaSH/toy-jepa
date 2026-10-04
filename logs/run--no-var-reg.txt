@@ -1,0 +1,17 @@
+device: mps | ema=True var_reg=False
+epoch     loss  enc_std probe_err  (px)
+    1   0.0001    0.001      3.84  (px)
+    2   0.0000    0.001      3.84  (px)
+    3   0.0000    0.001      3.87  (px)
+    4   0.0000    0.001      4.07  (px)
+    5   0.0000    0.001      4.14  (px)
+    6   0.0000    0.001      4.13  (px)
+    7   0.0000    0.001      4.02  (px)
+    8   0.0000    0.001      3.85  (px)
+    9   0.0000    0.001      3.94  (px)
+   10   0.0000    0.001      3.96  (px)
+   11   0.0000    0.001      4.22  (px)
+   12   0.0000    0.001      4.22  (px)
+
+collapse: enc_std -> ~0, loss -> 0.0000, probe_err WORSE than an untrained encoder (~3.0px)
+healthy:  enc_std O(1) AND probe_err -> ~1.8px (mean-predictor floor is 5.62px)
