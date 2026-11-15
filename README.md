@@ -34,9 +34,14 @@ Baselines on the same data: always predicting the mean position 5.62 px, an untr
 3. Normalizing avoided the fast solution of shrinking to 0 but does not stop all embeddings pointing in the same direction, since the loss ignores size.
 4. Fully collapsed runs were worse than an untrained encoder, 3.53px and 4.22px vs 3.0px in probe_err.
 
+## Limits
+- Each variant was run once, with one seed (42), so the differences between the rows are not measured against the variation from one run to the next.
+- The probe is fitted and tested on clips the encoder trained on: of the 7,936 clips read in an epoch, 6,348 fit the probe and 1,588 are held out from the probe, but not from the encoder. There is no validation set.
+- `enc_std` is read from the last training batch of each epoch (256 clips), not from the whole dataset.
+
 ## How to run 
 ```bash
-pip install torch numpy matplotlib
+pip install -r requirements.txt   # torch, numpy and matplotlib, at versions checked against the logs
 mkdir -p logs
 
 python train_jepa.py --epochs 12 --no-ema --no-var-reg     | tee "logs/run--no-ema_--no-var-reg.txt"   # 1: neither
@@ -47,6 +52,8 @@ python train_jepa.py --epochs 12 --no-var-reg --normalize  | tee "logs/run_ema_n
 python plot_runs.py   # reads the four logs in logs/, writes collapse.png
 ```
 About 9 minutes per run on an M4 Pro (MPS). Each run prints one row per epoch: loss, `enc_std` (spread of the embeddings across a batch), `probe_err` (pixels of error when a ridge probe reads the largest shape's position from the frozen embeddings).
+
+The checks to run before changing the code are in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Honest note  
 Built as self-study. The dataset generator (`bouncing_shapes.py`) was generated with Claude. `jepa.py` and `train_jepa.py` started as exercise skeletons, also generated with Claude: the conv encoder, the argument parsing, the data loading and the docstrings. I wrote the predictor, the target encoder and its EMA update, the forward pass, the two loss terms, the training step, the probe, the `--normalize` variant and the log parser in `plot_runs.py` (its matplotlib calls were written with an assistant). The logs in `logs/` are the runs behind the table.
