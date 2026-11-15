@@ -1,12 +1,14 @@
-"""Week 2 prep: synthetic video dataset for the toy JEPA.
+"""Synthetic video dataset for the toy JEPA: short clips of shapes bouncing in a box.
 
-Generates short grayscale clips of shapes bouncing in a box — a world with
-learnable dynamics (position, velocity, elastic bounces) and no visual noise.
-Your toy JEPA will learn to predict future latents from past ones on this.
+Each clip is 12 grayscale frames of 32 x 32 pixels with two shapes (discs or squares) that move in
+straight lines and bounce off the walls. The world has dynamics a model can learn (position,
+velocity, bounces) and no visual noise. train_jepa.py trains on these clips.
 
-Preview:  .venv/bin/python week2/bouncing_shapes.py          # writes preview.png
+Preview:  python bouncing_shapes.py          # writes preview.png next to this file
 Import:   from bouncing_shapes import BouncingShapes
 """
+
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -87,5 +89,6 @@ if __name__ == "__main__":
             axes[row, t].imshow(clip[t, 0], cmap="gray")
             axes[row, t].axis("off")
     fig.suptitle("BouncingShapes: 4 clips x 12 frames")
-    fig.savefig("week2/preview.png", dpi=100, bbox_inches="tight")
-    print("wrote week2/preview.png — eyeball that the physics looks right")
+    preview = Path(__file__).parent / "preview.png"
+    fig.savefig(preview, dpi=100, bbox_inches="tight")
+    print(f"wrote {preview} — eyeball that the physics looks right")
