@@ -1,0 +1,5 @@
+# Versions checked on Nov 15, 2026 with Python 3.12 on macOS (Apple MPS): one epoch of each variant
+# prints the first row of its log in logs/, and plot_runs.py redraws the same lines.
+torch==2.13.0
+numpy==2.5.2
+matplotlib==3.11.1
