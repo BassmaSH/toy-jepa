@@ -3,3 +3,5 @@ __pycache__/
 *.pt
 .DS_Store
 preview.png
+.pytest_cache/
+.ruff_cache/
