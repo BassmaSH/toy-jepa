@@ -38,8 +38,12 @@ def probe_eval(model, loader, device, train_batches=40):
     """Ridge-regression probe, closed form: frozen embeddings -> the largest
     shape's (x, y). Returns the mean absolute error in pixels.
 
-    Embeddings of train_batches + 10 batches are collected; the first
-    train_batches fit the probe, the last 10 are held out.
+    At most train_batches + 10 batches are read from the loader, and the rows
+    collected are split in the ratio train_batches : 10 (4 : 1 by default):
+    the first part fits the probe, the rest is held out. With the settings in
+    main() an epoch has only 31 batches (8,000 clips, batch size 256, last
+    partial batch dropped), so the loader ends before the limit of 50: 7,936
+    rows are collected, 6,348 fit the probe and 1,588 are held out.
     """
     Z, Y = [], []
     for i, (clip, state) in enumerate(loader):
