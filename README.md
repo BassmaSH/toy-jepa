@@ -24,7 +24,7 @@ Common: encoder, predictor, frames 0-3 as input, frames 8-11 as target, stop gra
 | 3: EMA + variance term | (default) | 0.6708 | 2.462 | **1.83 px** |
 | 4: EMA + normalize | `--no-var-reg --normalize` | 0.0000 | 0.059 | 2.68 px |
 
-Baselines on the same data: always predicting the mean position 5.62 px, an untrained encoder about 3.0 px.
+Baselines on the same data: always predicting the mean position about 5.5 px (5.54 px over all clips; 5.45 to 5.65 px through the probe's split, depending on the shuffle), an untrained encoder about 3.0 px (3.14 px at seed 42; 2.83 to 3.14 px over five seeds). `python baselines.py` measures both.
 
 ![enc_std and probe error per epoch, one line per run](collapse.png)
 
@@ -38,6 +38,7 @@ Baselines on the same data: always predicting the mean position 5.62 px, an untr
 - Each variant was run once, with one seed (42), so the differences between the rows are not measured against the variation from one run to the next.
 - The probe is fitted and tested on clips the encoder trained on: of the 7,936 clips read in an epoch, 6,348 fit the probe and 1,588 are held out from the probe, but not from the encoder. There is no validation set.
 - `enc_std` is read from the last training batch of each epoch (256 clips), not from the whole dataset.
+- `train_jepa.py` prints "5.62px" for the mean predictor at the end of a run, and the dashed line in `collapse.png` is drawn at 5.62: this figure is inside the measured range above but is not one `baselines.py` prints, and it is kept so that a run's output stays identical to the logs.
 
 ## How to run 
 ```bash
@@ -50,10 +51,11 @@ python train_jepa.py --epochs 12                           | tee "logs/run.txt" 
 python train_jepa.py --epochs 12 --no-var-reg --normalize  | tee "logs/run_ema_normalize.txt"          # 4: EMA + normalize
 
 python plot_runs.py   # reads the four logs in logs/, writes collapse.png
+python baselines.py   # the two baselines quoted under the table, about 2 minutes
 ```
 About 9 minutes per run on an M4 Pro (MPS). Each run prints one row per epoch: loss, `enc_std` (spread of the embeddings across a batch), `probe_err` (pixels of error when a ridge probe reads the largest shape's position from the frozen embeddings).
 
 The checks to run before changing the code are in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Honest note  
-Built as self-study. The dataset generator (`bouncing_shapes.py`) was generated with Claude. `jepa.py` and `train_jepa.py` started as exercise skeletons, also generated with Claude: the conv encoder, the argument parsing, the data loading and the docstrings. I wrote the predictor, the target encoder and its EMA update, the forward pass, the two loss terms, the training step, the probe, the `--normalize` variant and the log parser in `plot_runs.py` (its matplotlib calls were written with an assistant). The logs in `logs/` are the runs behind the table.
+Built as self-study. The dataset generator (`bouncing_shapes.py`) was generated with Claude. `jepa.py` and `train_jepa.py` started as exercise skeletons, also generated with Claude: the conv encoder, the argument parsing, the data loading and the docstrings. I wrote the predictor, the target encoder and its EMA update, the forward pass, the two loss terms, the training step, the probe, the `--normalize` variant and the log parser in `plot_runs.py` (its matplotlib calls were written with an assistant). The logs in `logs/` are the runs behind the table. In November 2026 the tests, the type hints, the lint settings, `CONTRIBUTING.md`, the workflow and `baselines.py` were added with Claude Code, following guidelines I defined beforehand, and the scripts were split into functions without changing what they compute.
