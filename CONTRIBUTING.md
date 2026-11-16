@@ -10,7 +10,7 @@ Research Code Handbook and the ML Code Completeness Checklist.
 pip install -r requirements.txt ruff==0.17.5 pytest
 ruff format .               # rewrites the files in the agreed style
 ruff check .                # reports what breaks a rule
-pytest -q                   # 25 checks, a few seconds, no GPU
+pytest -q                   # 28 checks, a few seconds, no GPU
 python bouncing_shapes.py   # the dataset's preview
 python plot_runs.py         # collapse.png, rebuilt from logs/
 ```
@@ -33,7 +33,7 @@ reporting. The settings are in `pyproject.toml`.
 | 9 | Computing is kept apart from reading and writing files | review |
 | 10 | No state shared between functions behind their backs | ruff flags `global`; review |
 | 11 | Numbers, columns and paths have names | review |
-| 12 | Every figure in the README's table is in a log in `logs/`; dependencies are written down | `tests/test_plot_runs.py` compares the table with the last row of each log; `requirements.txt` |
+| 12 | Every figure in the README's table is in a log in `logs/`; dependencies are written down | `tests/test_plot_runs.py` compares the table with the last row of each log; `baselines.py` measures the two baselines; `requirements.txt` |
 | 13 | Type hints on every function; a docstring with `Args:` and `Returns:` where the names do not say it | ruff |
 | 14 | One folder per role, one level deep; only the commands a reader runs sit in the root | review |
 
@@ -43,7 +43,7 @@ reporting. The settings are in `pyproject.toml`.
 
 | folder | role | goes here |
 |---|---|---|
-| root | what a reader runs or imports | `train_jepa.py`, `plot_runs.py`, `bouncing_shapes.py`, `jepa.py`, and the files that describe the repo |
+| root | what a reader runs or imports | `train_jepa.py`, `plot_runs.py`, `baselines.py`, `bouncing_shapes.py`, `jepa.py`, and the files that describe the repo |
 | `logs/` | what came out | the printed output of one training run per file, never edited |
 | `tests/` | how the code is checked | one file per module tested |
 
@@ -69,5 +69,5 @@ in `LABELS`, and the four published logs stay as they are.
 
 ## Not covered
 
-No workflow trains the model: the check on every push has no GPU and stops at the tests, the
-dataset preview and the plot.
+No workflow trains the model or runs `baselines.py`: the check on every push has no GPU and stops
+at the tests, the dataset preview and the plot.

@@ -10,7 +10,9 @@ Columns:
                batch. Near 0 = collapse.
   probe_err -> pixels of error when a ridge probe on the frozen embeddings
                reads the largest shape's (x, y). On this dataset: always
-               predicting the mean gives 5.62 px, an untrained encoder ~3.0 px.
+               predicting the mean gives about 5.5 px, an untrained encoder ~3.0 px
+               (measured by baselines.py; the closing lines of a run print 5.62,
+               kept so that the output stays identical to the logs).
 
 Who wrote what: the argument parsing, the data loading and the docstrings started as an exercise
 skeleton generated with Claude. The author wrote the training step, the probe and the --normalize

@@ -25,7 +25,8 @@ LABELS = {
 }
 # Columns of an epoch row, as train_jepa.py prints it: epoch, loss, enc_std, probe_err.
 ENC_STD_COLUMN, PROBE_ERR_COLUMN = 2, 3
-# Error of always predicting the mean position, as stated in the README.
+# Where the dashed line is drawn: the mean predictor's error as train_jepa.py prints it. The README
+# gives the measured range (baselines.py).
 MEAN_PREDICTOR_ERR_PX = 5.62
 
 Series = tuple[list[int], list[float], list[float]]  # epochs, enc_std, probe_err
